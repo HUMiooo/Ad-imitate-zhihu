@@ -11,8 +11,9 @@
 #import "AdvertisementTableViewCell.h"
 
 #define ADCellHeight 120//广告cell高度
-#define IMAGESCALE 1.00//图片设置比例
-#define ISSETSCALE NO//图片缩放是否启用
+#define IMAGESCALE 1.20//图片设置比例
+#define ISSETSCALE YES//图片缩放是否启用
+#define IMAGEMOVINGSCALE 3//图片缩放倍率:数字越大变化越小
 #define ScreenWidth [UIScreen mainScreen].bounds.size.width
 #define ScreenHeight [UIScreen mainScreen].bounds.size.height
 @interface AdvertisementViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -72,6 +73,7 @@
     cell.backgroundColor = [UIColor clearColor];
     AdvertisementModel *model = self.array[[indexPath row]];
     [cell setModel:model];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -105,7 +107,7 @@
     CGFloat y = scrollView.contentOffset.y/2+self.originalHeight/3;//中心点y坐标
     CGFloat scale = 1;
     if (ISSETSCALE) {
-        scale = (1-scrollView.contentOffset.y/ScreenHeight);
+        scale = (1-(scrollView.contentOffset.y/ScreenHeight)/IMAGEMOVINGSCALE);
     }
     //    CGFloat scale1 = 1;//图片移动时比例变化率
     
