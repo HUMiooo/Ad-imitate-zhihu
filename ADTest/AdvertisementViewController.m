@@ -2,7 +2,7 @@
 //  AdvertisementViewController.m
 //  ADTest
 //
-//  Created by 赵春生 on 2018/6/6.
+//  Created by HUMioo on 2018/6/6.
 //  Copyright © 2018 HUMiooZcs. All rights reserved.
 //
 
@@ -12,7 +12,7 @@
 
 #define ADCellHeight 120//广告cell高度
 #define IMAGESCALE 1.20//图片设置比例
-#define ISSETSCALE YES//图片缩放是否启用
+#define ISSETSCALE true//图片缩放是否启用
 #define IMAGEMOVINGSCALE 3//图片缩放倍率:数字越大变化越小
 #define ScreenWidth [UIScreen mainScreen].bounds.size.width
 #define ScreenHeight [UIScreen mainScreen].bounds.size.height
@@ -48,14 +48,17 @@
     [self creatUI];
 }
 - (void)creatUI {
-    self.bkimv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"001"]];
-    
-    self.originalHeight = self.bkimv.bounds.size.height*(ScreenWidth*IMAGESCALE/self.bkimv.bounds.size.width);
-    self.originalWidth = ScreenWidth*IMAGESCALE;
-    
-    self.bkimv.bounds = CGRectMake(0, 0, self.originalWidth, self.originalHeight);
-    
-    [self.view addSubview:self.bkimv];
+    self.bkimv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"002"]];
+    if (!self.bkimv.image) {
+        NSLog(@"图片路径错误!!!");
+    } else {
+        self.originalHeight = self.bkimv.bounds.size.height*(ScreenWidth*IMAGESCALE/self.bkimv.bounds.size.width);
+        self.originalWidth = ScreenWidth*IMAGESCALE;
+        
+        self.bkimv.bounds = CGRectMake(0, 0, self.originalWidth, self.originalHeight);
+        
+        [self.view addSubview:self.bkimv];
+    }
     
     self.table = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     self.table.backgroundColor = [UIColor clearColor];
@@ -107,6 +110,7 @@
     CGFloat y = scrollView.contentOffset.y/2+self.originalHeight/3;//中心点y坐标
     CGFloat scale = 1;
     if (ISSETSCALE) {
+        //图片缩放比例
         scale = (1-(scrollView.contentOffset.y/ScreenHeight)/IMAGEMOVINGSCALE);
     }
     //    CGFloat scale1 = 1;//图片移动时比例变化率
@@ -115,7 +119,7 @@
     CGRect rectInTableView = [self.table rectForRowAtIndexPath:path];
     CGRect rectInSuperview = [self.table convertRect:rectInTableView toView:[self.table superview]];//cell相对于屏幕位置
     
-    NSLog(@"%f %f %f",scale, y , rectInSuperview.origin.y);
+    //NSLog(@"%f %f %f",scale, y , rectInSuperview.origin.y);
     
     if (rectInSuperview.origin.y <= (y-h*scale/2)) {
         self.bkimv.bounds = CGRectMake(0, 0, w*scale, h*scale);
